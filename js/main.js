@@ -7,6 +7,7 @@
   humBtn.addEventListener("click", () => {
     navMenu.classList.add("opened");
   });
+
   closeNav.addEventListener("click", () => {
     navMenu.classList.remove("opened");
   });
@@ -195,3 +196,47 @@
       .join(" ");
   };
 })();
+// Testimonial Section
+
+(() => {
+  const sliderContainer = document.querySelector(".testi-slider-container");
+  const slides = sliderContainer.querySelectorAll(".testi-item");
+  const slideWidth = sliderContainer.offsetWidth;
+  const prevBtn = document.querySelector(".testi-slider-nav .prev");
+  const nextBtn = document.querySelector(".testi-slider-nav .next");
+  const activeSlide = sliderContainer.querySelector(".testi-item.active");
+  let slideIndex = Array.from(activeSlide.parentElement.children).indexOf(
+    activeSlide
+  );
+  console.log(slideIndex);
+
+  slides.forEach((slide) => {
+    slide.style.width = slideWidth + "px";
+  });
+  sliderContainer.style.width = slideWidth * slides.length + "px";
+
+  const slider = () => {
+    sliderContainer
+      .querySelector(".testi-item.active")
+      .classList.remove("active");
+    slides[slideIndex].classList.add("active");
+    sliderContainer.style.marginLeft = -(slideWidth * slideIndex) + "px";
+  };
+
+  nextBtn.addEventListener("click", () => {
+    if (slideIndex === slides.length - 1) {
+      slideIndex = 0;
+    } else {
+      slideIndex++;
+    }
+    slider();
+  });
+  prevBtn.addEventListener("click", () => {
+    if (slideIndex === 0) {
+      slideIndex = slides.length - 1;
+    } else {
+      slideIndex--;
+    }
+    slider();
+  });
+  })();
