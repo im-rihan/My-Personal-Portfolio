@@ -1,15 +1,60 @@
-// header all btns
+const bodyScrowllingToggle = () => {
+  document.body.classList.toggle("stop-scrowlling");
+};
 (() => {
-  const humBtn = document.querySelector(".humbergur-btn");
+  const humbergeBtn = document.querySelector(".humbergur-btn");
   const navMenu = document.querySelector(".nav-menu");
-  const closeNav = document.querySelector(".close-nav-menu");
+  const closeNavBtn = navMenu.querySelector(".close-nav-menu");
 
-  humBtn.addEventListener("click", () => {
-    navMenu.classList.add("opened");
+  humbergeBtn.addEventListener("click", () => {
+    navMenu.classList.add("open");
+    bodyScrowllingToggle();
   });
+  const hideNavMenu = () => {
+    navMenu.classList.remove("open");
+    fadeOutEffect();
+    bodyScrowllingToggle();
+  };
+  closeNavBtn.addEventListener("click", hideNavMenu);
+  const fadeOutEffect = () => {
+    document.querySelector(".fade-out-effect").classList.add("active");
+    setTimeout(() => {
+      document.querySelector(".fade-out-effect").classList.remove("active");
+    }, 300);
+  };
 
-  closeNav.addEventListener("click", () => {
-    navMenu.classList.remove("opened");
+  document.addEventListener("click", (event) => {
+    if (event.target.classList.contains("link-item")) {
+      if (event.target.hash !== "") {
+        event.preventDefault();
+        const hash = event.target.hash;
+        document.querySelector(".section.active").classList.add("hide");
+        document.querySelector(".section.active").classList.remove("active");
+        document.querySelector(hash).classList.add("active");
+        document.querySelector(hash).classList.remove("hide");
+        navMenu
+          .querySelector(".active")
+          .classList.add("outer-shadow", "hover-in-shadow");
+        navMenu
+          .querySelector(".active")
+          .classList.remove("active", "inner-shadow");
+
+        if (navMenu.classList.contains("open")) {
+          event.target.classList.add("active", "inner-shadow");
+          event.target.classList.remove("outer-shadow", "hover-in-shadow");
+          hideNavMenu();
+        } else {
+          let navItems = navMenu.querySelectorAll(".link-item");
+          navItems.forEach((item) => {
+            if (hash === item.hash) {
+             item.classList.add("active", "inner-shadow");
+             item.classList.remove("outer-shadow", "hover-in-shadow");
+            }
+          });
+          fadeOutEffect();
+        }
+      }
+    }
   });
 })();
 
@@ -36,7 +81,6 @@
 })();
 
 /* Portfolio Filter and Portfolio Popup */
-
 (() => {
   const filterContainer = document.querySelector(".portfolio-filter");
   const portfolioItemsContainer = document.querySelector(".portfolio-items");
@@ -105,10 +149,6 @@
       popupDetails();
     }
   });
-
-  const bodyScrowllingToggle = () => {
-    document.body.classList.toggle("stop-scrowlling");
-  };
 
   const popupToggle = () => {
     popup.classList.toggle("open");
@@ -196,8 +236,8 @@
       .join(" ");
   };
 })();
-// Testimonial Section
 
+// Testimonial Section
 (() => {
   const sliderContainer = document.querySelector(".testi-slider-container");
   const slides = sliderContainer.querySelectorAll(".testi-item");
@@ -208,7 +248,7 @@
   let slideIndex = Array.from(activeSlide.parentElement.children).indexOf(
     activeSlide
   );
-  console.log(slideIndex);
+  // console.log(slideIndex);
 
   slides.forEach((slide) => {
     slide.style.width = slideWidth + "px";
@@ -239,4 +279,15 @@
     }
     slider();
   });
-  })();
+})();
+
+// Hide all section except active
+(() => {
+  const sections = document.querySelectorAll(".section");
+  // console.log(sections);
+  sections.forEach((section) => {
+    if (!section.classList.contains("active")) {
+      section.classList.add("hide");
+    }
+  });
+})();
